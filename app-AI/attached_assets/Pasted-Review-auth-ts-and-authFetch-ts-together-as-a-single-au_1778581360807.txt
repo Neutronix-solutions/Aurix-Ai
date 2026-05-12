@@ -1,0 +1,81 @@
+Review auth.ts and authFetch.ts together as a single authentication/session architecture.
+
+Do not perform a rewrite.
+Do not change API contracts used by the mobile app.
+Do not remove business logic.
+
+Your task is to perform a surgical production-hardening pass focused on consistency, runtime safety, and auth lifecycle integrity.
+
+Audit and refactor the system around these areas:
+
+AUTH ARCHITECTURE
+
+* ensure access-token and refresh-token flows are internally consistent
+* verify login, register, refresh, logout, and token rotation behavior
+* prevent stale token overwrite scenarios
+* ensure refresh tokens are revocable and safely rotated
+* verify JWT payload consistency across all issuance paths
+
+ROUTE SAFETY
+
+* detect and remove duplicate route definitions
+* consolidate conflicting password/avatar handlers into canonical implementations
+* verify Express route order cannot shadow newer handlers
+* preserve all existing response shapes consumed by mobile clients
+
+OTP SYSTEMS
+
+* audit coexistence of:
+
+  * in-memory OTP stores
+  * Redis OTP persistence
+  * email verification flows
+  * phone verification flows
+* prevent state desynchronization between Redis and memory stores
+* verify cooldowns, expiration, and lockouts are enforced consistently
+* ensure production-safe behavior under horizontal scaling / multiple server instances
+
+MOBILE AUTH CLIENT
+
+* harden authFetch.ts against concurrent refresh races
+* serialize refresh attempts with a shared refresh promise / mutex
+* prevent infinite 401 retry loops
+* prevent retries from duplicating unsafe POST side-effects
+* verify token persistence consistency between memory and AsyncStorage
+* improve offline/network failure classification across Android/iOS
+
+RELIABILITY
+
+* verify no undefined helpers/constants/functions remain
+* verify refresh flow cannot silently fail into invalid auth state
+* ensure all async failures are surfaced deterministically
+* ensure no expired refresh token can continue authenticating requests
+
+SECURITY
+
+* verify password change invalidates old refresh sessions if applicable
+* verify email-change flow reissues tokens safely
+* verify OTP brute-force protections are enforced consistently
+* verify disposable-email protections are consistently applied
+* verify avatar upload validation cannot be bypassed via malformed MIME/data URLs
+
+CONSTRAINTS
+
+* preserve strict TypeScript mode
+* no schema redesign
+* no framework migration
+* no axios conversion
+* no removal of existing features
+* no silent behavioral changes for mobile consumers
+* avoid large-scale rewrites
+* prefer minimal, isolated patches
+
+After completion provide:
+
+1. all duplicated/conflicting routes removed
+2. all runtime bugs prevented
+3. all auth/session risks remaining
+4. refresh-token lifecycle verification
+5. OTP architecture verification
+6. mobile retry/refresh safety verification
+7. production-readiness score for Android release

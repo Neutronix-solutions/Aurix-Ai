@@ -1,0 +1,232 @@
+1. Fix Existing Issues (Critical)
+
+* Fix logout:
+    * Clear auth tokens (JWT/session)
+    * Reset app state بالكامل
+    * Redirect to login screen
+* Fix AI Chat:
+    * Ensure stable API connection
+    * Handle errors, timeouts, empty responses
+    * Validate request/response flow
+
+⸻
+
+2. Core Product Identity
+
+The app must behave as a Financial Coach, not a chatbot:
+
+* Guides user behavior over time
+* Gives proactive insights
+* Tracks habits and progress
+* Focus: action, not كلام نظري
+
+⸻
+
+3. SMS Data Integration (Main Engine)
+
+Permissions:
+
+* Request READ_SMS with clear explanation
+* One-time user consent (privacy-first UX)
+
+SMS Parsing Engine:
+
+Extract from bank SMS:
+
+* Transaction type (debit / credit)
+* Amount
+* Currency
+* Merchant
+* Date/time
+
+Example:
+
+“Card charged 50 QAR at Carrefour”
+→ expense: 50
+→ category: Groceries
+→ merchant: Carrefour
+
+⸻
+
+4. Data Pipeline Architecture
+
+SMS → Parser → Structured Transactions → Database → Insights Engine → AI Coach
+
+* DO NOT send raw SMS directly to AI
+* Ensure high accuracy parsing (>85%)
+
+⸻
+
+5. Categorization System
+
+* Start with rule-based:
+    * Talabat → Food
+    * Uber → Transport
+* Expand to ML later
+
+⸻
+
+6. Real-Time Tracking
+
+* On new SMS:
+    * Update expenses instantly
+    * Trigger insight:
+        * “You just spent 80 QAR on food”
+
+⸻
+
+7. AI Coach System
+
+Scope:
+
+* Personal finance
+* Budgeting
+* Expenses
+* Income
+* Investments (basic/intermediate)
+
+Behavior:
+
+* Ask questions if data missing
+* Analyze user behavior
+* Give actionable steps
+
+Example Flow:
+
+User: “I spend too much”
+AI:
+
+1. Ask category
+2. Analyze data
+3. Respond:
+    * “You overspent 25% on food”
+    * “Reduce 300 QAR this month”
+
+⸻
+
+8. Memory System
+
+Store:
+
+* User income
+* Expenses
+* Goals
+* Previous advice
+
+Use memory:
+
+* “Last week you wanted to save 2000 QAR — you’re behind”
+
+⸻
+
+9. Insights Engine
+
+Generate:
+
+* Daily summary
+* Weekly trends
+* Monthly reports
+
+Examples:
+
+* “Spending increased 30% vs last week”
+* “Top category: Food”
+
+⸻
+
+10. Financial Health Score
+
+* Score (0–100) based on:
+    * Saving rate
+    * Spending habits
+    * Budget adherence
+
+⸻
+
+11. Smart Alerts (High Value)
+
+* “You exceeded your budget”
+* “Unusual spending detected”
+* “3 transactions today — above normal”
+
+⸻
+
+12. UX / UI Requirements
+
+Dashboard:
+
+* Balance
+* Expenses
+* Health score
+
+Chat:
+
+* WhatsApp-style UI
+* Fast responses
+* Typing indicator
+* Suggested questions
+
+Insights Page:
+
+* Charts + trends
+* Clear summaries
+
+⸻
+
+13. Backend Requirements
+
+* Secure API (OpenAI or similar)
+* Store transactions + chat history
+* Optimize latency
+* Error handling system
+
+⸻
+
+14. Edge Cases
+
+* Multiple bank SMS formats
+* Arabic + English parsing
+* Missing merchant
+* Duplicate SMS
+
+⸻
+
+15. Testing Phase
+
+Test:
+
+* Login / Logout
+* SMS parsing accuracy
+* AI responses relevance
+* Offline / API failure
+
+Fix all bugs before release
+
+⸻
+
+16. Deployment
+
+* Build Android production version
+* Optimize performance
+* Prepare Google Play listing:
+    * App name: Money Mind AI
+    * Stable, no crashes
+
+⸻
+
+17. Monetization (Optional)
+
+* Free: tracking + basic insights
+* Paid:
+    * Advanced coaching
+    * Deep analytics
+    * Investment insights
+
+⸻
+
+18. Critical Rules (Non-Negotiable)
+
+* No generic AI responses
+* All advice must be actionable
+* Accuracy of financial data is priority
+* UX must feel fast and simple

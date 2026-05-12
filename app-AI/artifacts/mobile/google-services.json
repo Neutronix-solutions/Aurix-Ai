@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "400118520396",
+    "project_id": "money-ai-7d151",
+    "storage_bucket": "money-ai-7d151.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400118520396:android:bcb6d7ff0cc4eedf81b2e9",
+        "android_client_info": {
+          "package_name": "com.aurixai.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc0ty6cNhP3rGSd1jcMcTKqdEX36lZ_E4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

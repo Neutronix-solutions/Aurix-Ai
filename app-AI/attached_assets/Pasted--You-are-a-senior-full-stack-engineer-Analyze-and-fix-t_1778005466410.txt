@@ -1,0 +1,106 @@
+"}
+You are a senior full-stack engineer. Analyze and fix the following issues in my application (Money Mind AI). Do NOT rewrite the whole project. Apply minimal, clean, production-grade fixes with clear separation of concerns.
+
+### Context
+- App includes: authentication, chatbot UI, gold purchase feature, currency settings, and market data.
+- Frontend likely uses React (or similar state-driven UI).
+- Backend is API-based.
+
+---
+
+## 🔴 ISSUE 1: Chatbot hidden behind bottom bar
+
+### Problem:
+The chatbot input / messages are partially or fully hidden behind a fixed bottom navigation bar.
+
+### Fix Requirements:
+- Ensure chatbot container has proper layout spacing.
+- Add bottom padding or margin equal to navbar height.
+- If using CSS:
+  - Avoid position: fixed overlap issues OR compensate with padding.
+- Ensure scroll works correctly and latest message is visible.
+- Chat input must always be accessible (NOT hidden).
+
+### Expected Fix:
+- Adjust CSS/layout (e.g. padding-bottom, flex layout).
+- Ensure responsive behavior on mobile.
+
+---
+
+## 🔴 ISSUE 2: Gold purchase not available
+
+### Problem:
+When user attempts to buy gold, feature is not ready but no proper UX handling exists.
+
+### Fix Requirements:
+- Intercept gold purchase action.
+- Show user-friendly message:
+
+Arabic:
+"هذه الميزة غير متاحة حالياً، يرجى زيارة محل الذهب لإتمام عملية الشراء."
+
+English:
+"This feature is currently unavailable. Please visit a physical gold shop to complete your purchase."
+
+- Do NOT proceed with API call.
+- Prevent crashes or empty states.
+
+---
+
+## 🔴 ISSUE 3: Logout does not redirect
+
+### Problem:
+User logs out but stays on same page.
+
+### Fix Requirements:
+- Clear authentication state (token/session/localStorage).
+- Trigger navigation redirect to Login/Register screen.
+- Ensure protected routes are not accessible after logout.
+- Use proper router method (e.g. navigate('/login')).
+
+---
+
+## 🔴 ISSUE 4: Currency change not reflected globally
+
+### Problem:
+User changes currency in settings, but markets, gold, and home page do NOT update.
+
+### Root Cause:
+State is not global OR not reactive.
+
+### Fix Requirements:
+- Implement global state management:
+  - React Context API OR Zustand OR Redux (lightweight preferred).
+- Store selected currency centrally.
+- All components (Markets, Gold, Home) must subscribe to this state.
+- Trigger re-render when currency updates.
+- If API data depends on currency:
+  - Re-fetch or convert values dynamically.
+
+### Expected Behavior:
+- Change currency once → updates everywhere instantly.
+
+---
+
+## 🔧 GENERAL REQUIREMENTS
+
+- Do NOT break existing features.
+- Keep code modular and clean.
+- Add comments ONLY where logic is non-trivial.
+- Avoid hardcoding values.
+- Maintain mobile responsiveness.
+- Handle edge cases.
+
+---
+
+## ✅ OUTPUT FORMAT
+
+1. Show only the updated code sections (not entire files).
+2. Clearly label which issue each fix belongs to.
+3. Briefly explain WHY the fix works (1–2 lines max per issue).
+
+---
+
+If something is unclear in the codebase, infer best practice and proceed.
+
+Act like a senior engineer shipping a production hotf

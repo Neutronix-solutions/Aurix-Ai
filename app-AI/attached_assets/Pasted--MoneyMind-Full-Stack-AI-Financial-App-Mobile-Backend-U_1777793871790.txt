@@ -1,0 +1,450 @@
+# 🧠 MoneyMind — Full-Stack AI Financial App (Mobile + Backend + UX)
+
+---
+
+## 🎯 PRODUCT OVERVIEW
+
+Build a **production-ready mobile application + backend system** called:
+
+# **MoneyMind**
+
+A unified financial intelligence platform that combines:
+
+* Expense tracking (manual + automated)
+* Investment portfolio tracking
+* AI financial coaching
+* Behavioral gamification
+* Smart SMS transaction parsing
+
+The system must include:
+
+* Mobile App (Android + iOS)
+* Backend API (FastAPI)
+* AI Integration (OpenAI)
+* Full bilingual support (English + Arabic)
+
+---
+
+## 🌍 LANGUAGE SYSTEM (CRITICAL)
+
+The app must support:
+
+* Default language: **English**
+* Optional switch: **Arabic (RTL)**
+
+### Requirements:
+
+* Full UI translation (no partial translation)
+* RTL layout when Arabic is enabled
+* Toggle language in settings instantly (no reload)
+* Persist language preference per user
+
+### UX Behavior:
+
+* English → LTR layout
+* Arabic → RTL layout
+* Numbers remain readable (QAR formatting consistent)
+
+---
+
+## 📱 MOBILE APP (FRONTEND)
+
+### Tech:
+
+* React Native (Expo) + TypeScript
+* State management: Zustand or Context API
+* API: Axios
+
+---
+
+## 🔐 AUTH SYSTEM
+
+* Email + Password
+* JWT authentication
+* Secure token storage
+* Auto-login if valid
+
+---
+
+## 💰 CORE FEATURES
+
+---
+
+### 1. SMART EXPENSE TRACKING
+
+User can:
+
+* Add expense manually
+* Auto-categorization:
+
+  * Rule-based first
+  * AI fallback
+
+Fields:
+
+* Amount (QAR)
+* Category
+* Merchant
+* Description
+* Date
+
+---
+
+### 2. 📩 SMS BANK PARSING (KEY FEATURE)
+
+#### Android:
+
+* Request READ_SMS permission
+* Auto-read incoming bank SMS
+* Parse:
+
+  * Amount
+  * Merchant
+  * Type (debit/credit)
+  * Date
+* Show preview → user confirms
+
+#### iOS:
+
+* No direct SMS access (Apple restriction)
+* Implement:
+
+  * Paste SMS
+  * Smart AI parsing
+  * Notification-based detection (optional)
+
+---
+
+### 3. 🧠 AI FINANCIAL COACH
+
+* OpenAI GPT-4o
+* Context-aware responses
+* Arabic + English support
+
+AI must receive:
+
+* Monthly income
+* Spending breakdown
+* Portfolio value
+* Financial score
+* Alerts
+
+Rules:
+
+* Max 4–5 sentences
+* Always actionable
+* Never generic
+
+---
+
+### 4. 📊 FINANCIAL HEALTH SCORE
+
+Score: 0–100
+
+Based on:
+
+* Spending ratio
+* Savings rate
+* Investment ratio
+* Portfolio performance
+* Consistency
+
+Display:
+
+* Circular score UI
+* Level names:
+
+  * Beginner
+  * Saver
+  * Planner
+  * Investor
+  * Wealth Builder
+
+---
+
+### 5. 📈 PORTFOLIO TRACKING
+
+User can:
+
+* Add holdings (Stocks / Crypto / ETFs)
+
+Track:
+
+* Quantity
+* Buy price
+* Current price
+
+Calculate:
+
+* P&L
+* Allocation
+* Performance
+
+---
+
+### 6. 🚨 ALERT SYSTEM
+
+Trigger alerts for:
+
+* Spending spikes
+* Budget exceeded
+* Fraud anomalies
+* Portfolio drops
+
+Each alert:
+
+* Title
+* Message
+* Severity
+
+---
+
+### 7. 🎮 GAMIFICATION
+
+* Streak system
+* Points system
+* Levels
+* Achievements
+
+---
+
+### 8. 🎯 GOALS & BUDGETS
+
+* Set monthly budgets
+* Track category spending
+* Create savings goals
+
+---
+
+## 🧠 UX FLOWS (BEHAVIOR-DRIVEN)
+
+---
+
+### 🔹 FLOW 1: FIRST USER EXPERIENCE (CRITICAL)
+
+1. User signs up
+2. Select language (EN / AR)
+3. Input monthly income
+4. Prompt:
+   “Enable smart tracking (SMS access on Android)”
+5. Show value:
+   “We automatically track your expenses from bank messages”
+
+→ Immediately show dashboard (not empty)
+
+---
+
+### 🔹 FLOW 2: DAILY ENGAGEMENT LOOP
+
+1. User opens app
+2. Dashboard shows:
+
+   * Score
+   * Spending summary
+   * Portfolio
+3. AI shows:
+   “Today’s Action”
+
+Example:
+→ “Reduce food spending by QAR 50 today”
+
+4. User takes action:
+
+   * Adds expense OR
+   * Checks AI OR
+   * Updates portfolio
+
+→ Reward:
+
+* Points + streak increase
+
+---
+
+### 🔹 FLOW 3: SMS → EXPENSE
+
+(Android)
+
+1. SMS detected
+2. Auto parsed
+3. Show preview
+4. User taps “Confirm”
+5. Expense added + points awarded
+
+(iOS)
+
+1. User pastes message
+2. AI parses
+3. Same confirmation flow
+
+---
+
+### 🔹 FLOW 4: AI COACH INTERACTION
+
+User asks:
+
+* “How can I save more?”
+
+System:
+
+* Inject real data
+* Respond with specific action
+
+Example:
+→ “You spent 32% on food. Cut QAR 200 weekly.”
+
+---
+
+### 🔹 FLOW 5: SCORE IMPROVEMENT LOOP
+
+1. User sees score (e.g., 52)
+2. AI explains:
+
+   * Why score is low
+3. Suggests 1 action
+4. User completes action
+5. Score increases
+6. Reward triggered
+
+---
+
+## 🖥️ BACKEND (FastAPI)
+
+---
+
+### Tech Stack:
+
+* FastAPI
+* SQLite
+* SQLAlchemy
+* JWT Auth
+* OpenAI API
+
+---
+
+### CORE MODULES:
+
+* Auth (register/login)
+* Expenses API
+* Portfolio API
+* AI Chat API (with context)
+* SMS Parser service
+* Fraud detection service
+* Scoring engine
+* Alerts system
+* Gamification service
+
+---
+
+### KEY ENDPOINTS:
+
+AUTH:
+
+* POST /auth/register
+* POST /auth/login
+
+EXPENSES:
+
+* GET /expenses
+* POST /expenses
+* GET /expenses/summary
+
+PORTFOLIO:
+
+* GET /portfolio
+* POST /portfolio
+
+AI:
+
+* POST /ai/chat
+* GET /ai/daily-action
+
+SCORE:
+
+* GET /score
+
+SMS:
+
+* POST /sms/parse
+* POST /sms/confirm
+
+---
+
+## 🤖 AI INTEGRATION
+
+### OpenAI Usage:
+
+* GPT-4o → Chat + Coaching
+* GPT-3.5 → Categorization fallback
+
+System prompt must include:
+
+* Score
+* Spending
+* Portfolio
+* Income
+
+---
+
+## 🎨 UI DESIGN
+
+Theme:
+
+* Dark fintech
+
+Colors:
+
+* Black background
+* Gold accents
+* Green (profit)
+* Red (loss)
+
+---
+
+## ⚠️ CONSTRAINTS
+
+* No real banking API
+* All currency in QAR
+* iOS must NOT access SMS directly
+* AI must be context-aware
+
+---
+
+## 🚀 BUILD PRIORITY
+
+1. Backend foundation
+2. Auth
+3. Expense tracking
+4. SMS parsing
+5. AI coach
+6. Score system
+7. Dashboard
+8. Portfolio
+
+---
+
+## 🎯 FINAL GOAL
+
+User opens MoneyMind and can:
+
+✓ Track expenses automatically
+✓ See financial score
+✓ Chat with AI advisor
+✓ Improve behavior daily
+✓ Switch language EN ↔ AR seamlessly
+
+---
+
+## 💡 CORE PRINCIPLE
+
+MoneyMind is not a tracker.
+
+It is a **behavior modification system**.
+
+Every feature must push the user to:
+→ Take action
+→ Improve score
+→ Build wealth
+
+---
+
+BUILD THIS WITH REAL LOGIC — NOT JUST UI.

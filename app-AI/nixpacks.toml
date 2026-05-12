@@ -1,0 +1,21 @@
+[phases.install]
+cmds = ["pnpm install --no-frozen-lockfile"]
+
+[phases.build]
+cmds = [
+  # lib/db must build first — api-server's TypeScript project reference depends on it.
+  "pnpm --filter @workspace/db run build",
+  "pnpm --filter @workspace/api-server run build",
+]
+
+# ── Start sequence ───────────────────────────────────────────────────────────
+# 1. Apply any pending versioned SQL migrations (drizzle-kit migrate).
+#    Migrations are additive only — no columns/tables are dropped without an explicit
+#    migration file. Safe to repeat; already-applied migrations are skipped.
+# 2. Start the server.
+#
+# Rollback strategy: create a new down-migration SQL file, redeploy.
+#   Never delete an existing migration file — drizzle tracks applied state in
+#   the __drizzle_migrations table.
+[start]
+cmd = "pnpm --filter @workspace/db run migrate && pnpm --filter @workspace/api-server run start"

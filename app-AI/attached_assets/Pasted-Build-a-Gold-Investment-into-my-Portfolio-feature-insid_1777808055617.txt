@@ -1,0 +1,130 @@
+Build a “Gold Investment into my Portfolio” feature inside the app.
+
+## 1. GOLD MARKETPLACE INTEGRATION
+
+Allow users to buy gold from partnered jewelry stores.
+
+### Features:
+
+* List of partner shops
+* Live gold price (per gram)
+* Product types:
+
+  * 24K gold (grams)
+  * 21K gold (grams)
+  * Coins / bars
+* Price auto-updates based on market
+
+### Purchase Flow:
+
+* User selects gold amount (grams or item)
+* App shows:
+
+  * current price
+  * fees (if any)
+  * total cost
+* Payment via wallet or card
+* Order is stored as a financial asset (NOT just an order)
+
+---
+
+## 2. MY PORTFOLIO PAGE
+
+
+
+### Sections:
+
+#### Portfolio Summary
+
+* Total value (based on live gold price)
+* Total invested
+* Profit / Loss (P&L)
+
+#### Holdings
+
+* Gold type (24K / 21K / coin)
+* Quantity (grams)
+* Average buy price
+* Current value
+
+#### Transactions
+
+* Buy history
+* Sell history (future-ready)
+
+---
+
+## 3. DATA MODEL
+
+### gold_assets
+
+* id
+* user_id
+* gold_type
+* quantity_grams
+* avg_buy_price
+* created_at
+
+### gold_transactions
+
+* id
+* user_id
+* type (buy/sell)
+* gold_type
+* quantity
+* price_per_gram
+* total_amount
+* timestamp
+
+---
+
+## 4. LIVE PRICE INTEGRATION
+
+* Fetch gold price API (per gram)
+* Cache price (refresh every 5–10 minutes)
+* Use price for:
+
+  * purchase
+  * portfolio valuation
+
+---
+
+## 5. UX RULES
+
+### My Portfolio:
+
+* Top card:
+
+  * Total value
+  * P&L (green/red)
+* Chart:
+
+  * portfolio value over time
+* List:
+
+  * each holding with real-time value
+
+---
+
+## 6. IMPORTANT LOGIC
+
+* Portfolio value must update dynamically
+* Original buy price must NEVER change
+* P&L = (current price - avg buy price) × quantity
+
+---
+
+## 7. FUTURE FEATURES (optional)
+
+* Sell gold from app
+* Withdraw physical gold
+* Auto-invest plans
+* Alerts (price up/down)
+
+---
+
+## 8. SECURITY + TRUST
+
+* Show partner store name in each purchase
+* Provide invoice
+* Add “verified partner” badge

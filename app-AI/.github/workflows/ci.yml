@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build lib/db declarations
+        run: npx tsc --build
+        working-directory: lib/db
+
+      - name: Typecheck api-server
+        run: pnpm --filter @workspace/api-server exec tsc --noEmit
+
+      - name: Typecheck mobile
+        run: pnpm --filter @workspace/mobile exec tsc --noEmit
+
+  test:
+    name: Unit & Integration tests
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+    env:
+      NODE_ENV: test
+      SESSION_SECRET: ci-test-secret-not-for-production-use-only
+      REDIS_URL: redis://localhost:6379
+      DATABASE_URL: ${{ secrets.CI_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build lib/db declarations
+        run: npx tsc --build
+        working-directory: lib/db
+
+      - name: Run tests
+        run: pnpm --filter @workspace/api-server test --run
+
+  migration-check:
+    name: Migration lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check no pending schema changes
+        run: pnpm --filter @workspace/db run generate -- --check
+        continue-on-error: true

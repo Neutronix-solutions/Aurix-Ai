@@ -1,0 +1,1228 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: MoneyMind API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication operations
+  - name: expenses
+    description: Expense tracking operations
+  - name: portfolio
+    description: Investment portfolio operations
+  - name: score
+    description: Financial health score operations
+  - name: goals
+    description: Goals and budgets operations
+  - name: gamification
+    description: Gamification and achievements operations
+  - name: alerts
+    description: Alert system operations
+  - name: sms
+    description: SMS parsing operations
+  - name: ai
+    description: AI financial coach operations
+  - name: openai
+    description: OpenAI AI chat, image, and audio operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: registerUser
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBody"
+      responses:
+        "201":
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: loginUser
+      tags: [auth]
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user profile
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/me/settings:
+    put:
+      operationId: updateUserSettings
+      tags: [auth]
+      summary: Update user settings (income, language)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSettingsBody"
+      responses:
+        "200":
+          description: Settings updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+
+  /expenses:
+    get:
+      operationId: getExpenses
+      tags: [expenses]
+      summary: List expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of expenses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Expense"
+    post:
+      operationId: createExpense
+      tags: [expenses]
+      summary: Create a new expense
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateExpenseBody"
+      responses:
+        "201":
+          description: Created expense
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Expense"
+
+  /expenses/summary:
+    get:
+      operationId: getExpenseSummary
+      tags: [expenses]
+      summary: Get spending summary by category
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Spending summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExpenseSummary"
+
+  /expenses/{id}:
+    delete:
+      operationId: deleteExpense
+      tags: [expenses]
+      summary: Delete an expense
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /portfolio:
+    get:
+      operationId: getPortfolio
+      tags: [portfolio]
+      summary: List portfolio holdings
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Portfolio holdings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PortfolioHolding"
+    post:
+      operationId: createPortfolioHolding
+      tags: [portfolio]
+      summary: Add a portfolio holding
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePortfolioHoldingBody"
+      responses:
+        "201":
+          description: Created holding
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortfolioHolding"
+
+  /portfolio/summary:
+    get:
+      operationId: getPortfolioSummary
+      tags: [portfolio]
+      summary: Get portfolio summary (total value, P&L, allocation)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Portfolio summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortfolioSummary"
+
+  /portfolio/{id}:
+    put:
+      operationId: updatePortfolioHolding
+      tags: [portfolio]
+      summary: Update a portfolio holding (current price)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePortfolioHoldingBody"
+      responses:
+        "200":
+          description: Updated holding
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortfolioHolding"
+    delete:
+      operationId: deletePortfolioHolding
+      tags: [portfolio]
+      summary: Delete a portfolio holding
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /score:
+    get:
+      operationId: getFinancialScore
+      tags: [score]
+      summary: Get the user's financial health score
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Financial health score
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FinancialScore"
+
+  /goals:
+    get:
+      operationId: getGoals
+      tags: [goals]
+      summary: List goals and budgets
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Goals and budgets
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GoalsAndBudgets"
+    post:
+      operationId: createGoal
+      tags: [goals]
+      summary: Create a savings goal
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGoalBody"
+      responses:
+        "201":
+          description: Created goal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+
+  /goals/budgets:
+    post:
+      operationId: createBudget
+      tags: [goals]
+      summary: Set a monthly budget for a category
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBudgetBody"
+      responses:
+        "201":
+          description: Created budget
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Budget"
+
+  /gamification:
+    get:
+      operationId: getGamification
+      tags: [gamification]
+      summary: Get user's gamification stats (streak, points, level, achievements)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Gamification stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GamificationStats"
+
+  /gamification/award:
+    post:
+      operationId: awardPoints
+      tags: [gamification]
+      summary: Award points for completing an action
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AwardPointsBody"
+      responses:
+        "200":
+          description: Updated gamification stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GamificationStats"
+
+  /alerts:
+    get:
+      operationId: getAlerts
+      tags: [alerts]
+      summary: List user alerts
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alert"
+
+  /alerts/{id}/read:
+    put:
+      operationId: markAlertRead
+      tags: [alerts]
+      summary: Mark an alert as read
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Alert marked as read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert"
+
+  /sms/parse:
+    post:
+      operationId: parseSms
+      tags: [sms]
+      summary: Parse an SMS bank message using AI
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ParseSmsBody"
+      responses:
+        "200":
+          description: Parsed SMS data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParsedSms"
+
+  /ai/daily-action:
+    get:
+      operationId: getDailyAction
+      tags: [ai]
+      summary: Get today's personalized AI financial action
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Daily action recommendation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyAction"
+
+  /openai/conversations:
+    get:
+      operationId: listOpenaiConversations
+      tags: [openai]
+      summary: List all AI coach conversations
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiConversation"
+    post:
+      operationId: createOpenaiConversation
+      tags: [openai]
+      summary: Create a new AI coach conversation
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOpenaiConversationBody"
+      responses:
+        "201":
+          description: Created conversation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversation"
+
+  /openai/conversations/{id}:
+    get:
+      operationId: getOpenaiConversation
+      tags: [openai]
+      summary: Get conversation with messages
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Conversation with messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversationWithMessages"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+    delete:
+      operationId: deleteOpenaiConversation
+      tags: [openai]
+      summary: Delete a conversation
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+
+  /openai/conversations/{id}/messages:
+    get:
+      operationId: listOpenaiMessages
+      tags: [openai]
+      summary: List messages in a conversation
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiMessage"
+    post:
+      operationId: sendOpenaiMessage
+      tags: [openai]
+      summary: Send a message to AI coach and get streaming response
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendOpenaiMessageBody"
+      responses:
+        "200":
+          description: SSE stream of assistant text chunks
+          content:
+            text/event-stream: {}
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+        name:
+          type: string
+      required:
+        - email
+        - password
+        - name
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/UserProfile"
+      required:
+        - token
+        - user
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        monthlyIncome:
+          type: number
+        language:
+          type: string
+          enum: [en, ar]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - email
+        - name
+        - language
+        - createdAt
+
+    UpdateSettingsBody:
+      type: object
+      properties:
+        monthlyIncome:
+          type: number
+        language:
+          type: string
+          enum: [en, ar]
+        name:
+          type: string
+
+    Expense:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        amount:
+          type: number
+        category:
+          type: string
+        merchant:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - amount
+        - category
+        - date
+        - createdAt
+
+    CreateExpenseBody:
+      type: object
+      properties:
+        amount:
+          type: number
+        category:
+          type: string
+        merchant:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date-time
+      required:
+        - amount
+        - category
+
+    ExpenseSummary:
+      type: object
+      properties:
+        totalSpent:
+          type: number
+        byCategory:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+              total:
+                type: number
+              percentage:
+                type: number
+            required:
+              - category
+              - total
+              - percentage
+        monthlyTrend:
+          type: number
+        periodDays:
+          type: integer
+      required:
+        - totalSpent
+        - byCategory
+        - monthlyTrend
+        - periodDays
+
+    PortfolioHolding:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        symbol:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum: [stock, crypto, etf]
+        quantity:
+          type: number
+        buyPrice:
+          type: number
+        currentPrice:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - symbol
+        - name
+        - type
+        - quantity
+        - buyPrice
+        - currentPrice
+        - createdAt
+
+    CreatePortfolioHoldingBody:
+      type: object
+      properties:
+        symbol:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum: [stock, crypto, etf]
+        quantity:
+          type: number
+        buyPrice:
+          type: number
+        currentPrice:
+          type: number
+      required:
+        - symbol
+        - name
+        - type
+        - quantity
+        - buyPrice
+        - currentPrice
+
+    UpdatePortfolioHoldingBody:
+      type: object
+      properties:
+        currentPrice:
+          type: number
+        quantity:
+          type: number
+      required:
+        - currentPrice
+
+    PortfolioSummary:
+      type: object
+      properties:
+        totalValue:
+          type: number
+        totalCost:
+          type: number
+        totalPnl:
+          type: number
+        totalPnlPercent:
+          type: number
+        allocation:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              value:
+                type: number
+              percentage:
+                type: number
+            required:
+              - type
+              - value
+              - percentage
+      required:
+        - totalValue
+        - totalCost
+        - totalPnl
+        - totalPnlPercent
+        - allocation
+
+    FinancialScore:
+      type: object
+      properties:
+        score:
+          type: integer
+        level:
+          type: string
+          enum: [Beginner, Saver, Planner, Investor, "Wealth Builder"]
+        breakdown:
+          type: object
+          properties:
+            spendingRatio:
+              type: number
+            savingsRate:
+              type: number
+            investmentRatio:
+              type: number
+            consistency:
+              type: number
+          required:
+            - spendingRatio
+            - savingsRate
+            - investmentRatio
+            - consistency
+        previousScore:
+          type: integer
+      required:
+        - score
+        - level
+        - breakdown
+
+    Goal:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        name:
+          type: string
+        targetAmount:
+          type: number
+        currentAmount:
+          type: number
+        deadline:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - name
+        - targetAmount
+        - currentAmount
+        - createdAt
+
+    Budget:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        category:
+          type: string
+        limitAmount:
+          type: number
+        spentAmount:
+          type: number
+        period:
+          type: string
+          enum: [monthly, weekly]
+      required:
+        - id
+        - userId
+        - category
+        - limitAmount
+        - spentAmount
+        - period
+
+    GoalsAndBudgets:
+      type: object
+      properties:
+        goals:
+          type: array
+          items:
+            $ref: "#/components/schemas/Goal"
+        budgets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Budget"
+      required:
+        - goals
+        - budgets
+
+    CreateGoalBody:
+      type: object
+      properties:
+        name:
+          type: string
+        targetAmount:
+          type: number
+        currentAmount:
+          type: number
+        deadline:
+          type: string
+          format: date-time
+      required:
+        - name
+        - targetAmount
+
+    CreateBudgetBody:
+      type: object
+      properties:
+        category:
+          type: string
+        limitAmount:
+          type: number
+        period:
+          type: string
+          enum: [monthly, weekly]
+      required:
+        - category
+        - limitAmount
+
+    GamificationStats:
+      type: object
+      properties:
+        points:
+          type: integer
+        streak:
+          type: integer
+        level:
+          type: integer
+        levelName:
+          type: string
+        nextLevelPoints:
+          type: integer
+        achievements:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              earned:
+                type: boolean
+              earnedAt:
+                type: string
+                format: date-time
+            required:
+              - id
+              - name
+              - description
+              - earned
+      required:
+        - points
+        - streak
+        - level
+        - levelName
+        - nextLevelPoints
+        - achievements
+
+    AwardPointsBody:
+      type: object
+      properties:
+        action:
+          type: string
+          enum: [add_expense, confirm_sms, chat_ai, update_portfolio, complete_goal, daily_login]
+        points:
+          type: integer
+      required:
+        - action
+
+    Alert:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+        severity:
+          type: string
+          enum: [info, warning, danger]
+        isRead:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - title
+        - message
+        - severity
+        - isRead
+        - createdAt
+
+    ParseSmsBody:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    ParsedSms:
+      type: object
+      properties:
+        amount:
+          type: number
+        merchant:
+          type: string
+        type:
+          type: string
+          enum: [debit, credit]
+        date:
+          type: string
+          format: date-time
+        category:
+          type: string
+        raw:
+          type: string
+      required:
+        - type
+        - raw
+
+    DailyAction:
+      type: object
+      properties:
+        action:
+          type: string
+        reasoning:
+          type: string
+        category:
+          type: string
+        targetAmount:
+          type: number
+      required:
+        - action
+        - reasoning
+
+    OpenaiConversation:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - createdAt
+
+    OpenaiMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        conversationId:
+          type: integer
+        role:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - conversationId
+        - role
+        - content
+        - createdAt
+
+    CreateOpenaiConversationBody:
+      type: object
+      properties:
+        title:
+          type: string
+      required:
+        - title
+
+    SendOpenaiMessageBody:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content
+
+    OpenaiConversationWithMessages:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenaiMessage"
+      required:
+        - id
+        - title
+        - createdAt
+        - messages
+
+    OpenaiError:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error

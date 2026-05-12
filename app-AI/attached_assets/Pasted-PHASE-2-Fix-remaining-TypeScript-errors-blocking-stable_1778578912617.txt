@@ -1,0 +1,114 @@
+PHASE 2 — Fix remaining TypeScript errors blocking stable Android production build
+
+The Metro runtime crash is fixed.
+
+Now complete a strict TypeScript stabilization pass across the mobile app.
+
+PROJECT:
+Aurix AI
+Expo Router
+React Native
+TypeScript strict mode
+
+Goal:
+ZERO TypeScript errors.
+Production-safe Android APK/AAB build.
+
+File:
+artifacts/mobile/app/(tabs)/profile.tsx
+
+Current unresolved references include:
+
+setConfirmPw
+pwInput
+saveBtn
+saveBtnText
+handleChangePassword
+pwSaving
+
+Tasks:
+
+Trace the Password Change Modal implementation.
+Add any missing useState declarations.
+Add missing handlers.
+Reuse existing styles where possible.
+If styles are missing:
+create minimal styles safely
+DO NOT duplicate existing style names
+Ensure:
+password modal opens
+save button works
+validation works
+no undefined references remain
+
+File:
+artifacts/mobile/app/_layout.tsx
+
+Tasks:
+
+Fix all TypeScript/navigation errors.
+Ensure:
+Auth routing works
+Protected routes redirect correctly
+Splash screen handling is stable
+No infinite rerenders
+Verify Expo Router types.
+
+Tasks:
+
+Fix Expo Notifications typing issues.
+Ensure permission flow works correctly.
+Prevent memory leaks on listeners.
+Ensure cleanup() removes listeners safely.
+Add null-safe guards everywhere.
+
+Files:
+
+components/GoalPlanner.tsx
+components/ScoreBreakdown.tsx
+
+Tasks:
+
+Fix all prop typings.
+Remove implicit any usage.
+Fix nullable values safely.
+Ensure calculations never produce NaN.
+Add fallback rendering for missing data.
+
+Run:
+
+pnpm --filter mobile exec tsc --noEmit
+
+Must return:
+ZERO ERRORS
+
+Then run:
+
+expo start -c
+
+Then run:
+
+eas build --platform android --profile preview
+
+Verify:
+
+no duplicate imports
+no unused state
+no unreachable code
+no shadowed variables
+no any abuse unless unavoidable
+no silent Promise rejections
+
+Generate:
+
+Exact files changed
+Exact errors fixed
+Remaining risks
+Android build readiness score /10
+Whether APK and AAB are production-safe
+
+CRITICAL:
+Do NOT rewrite architecture.
+Do NOT remove business logic.
+Do NOT disable TypeScript rules.
+Fix correctly.

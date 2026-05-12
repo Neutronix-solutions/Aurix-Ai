@@ -1,0 +1,151 @@
+You are a senior QA engineer and mobile app release manager.
+
+Your task is to fully test and validate my application (Money Mind AI) for production readiness before publishing to Google Play Store and Apple App Store.
+
+DO NOT modify code unless necessary to fix critical issues. Focus on testing, validation, and reporting.
+
+---
+
+## 🎯 OBJECTIVE
+Ensure the app is:
+- Functionally correct
+- Stable under edge cases
+- UI/UX consistent
+- Ready for store submission
+- Free from critical bugs
+
+---
+
+## 🔍 TESTING SCOPE
+
+### 1. ✅ Authentication Flow
+- Register → Login → Logout
+- Invalid inputs (empty, wrong password, invalid email)
+- Session persistence
+- Logout redirects correctly to login screen
+
+---
+
+### 2. ✅ Chatbot Feature
+- Chat UI visibility (NOT hidden behind navbar)
+- Send/receive messages
+- Empty message handling
+- Long message scrolling behavior
+- Network failure handling
+
+---
+
+### 3. ✅ Currency System
+- Change currency in settings
+- Verify update reflects in:
+  - Home page
+  - Markets page
+  - Gold page
+- Test multiple currency switches rapidly
+- Validate data consistency
+
+---
+
+### 4. ✅ Gold Feature (Disabled Flow)
+- Attempt to purchase gold
+- Verify message appears:
+  "هذه الميزة غير متاحة حالياً..."
+- Ensure:
+  - No API call is triggered
+  - No crash occurs
+  - UI remains stable
+
+---
+
+### 5. ✅ Navigation & Routing
+- All screens accessible
+- No broken routes
+- Back navigation works correctly
+- Protected routes blocked after logout
+
+---
+
+### 6. ✅ UI/UX Testing (Mobile Focus)
+- Test on different screen sizes
+- Check:
+  - Overlapping elements
+  - Hidden buttons
+  - Scroll issues
+- Keyboard does not block inputs
+- Bottom navbar does not hide content
+
+---
+
+### 7. ✅ API & Data Handling
+- Simulate:
+  - Slow network
+  - API failure (500 / timeout)
+- Ensure:
+  - Proper error messages
+  - No crashes
+  - Loading states exist
+
+---
+
+### 8. ✅ Performance Testing
+- App launch time
+- Screen load time
+- Chat responsiveness
+- Avoid unnecessary re-renders
+
+---
+
+### 9. ✅ Security Checks
+- Ensure:
+  - Tokens are stored securely
+  - No sensitive data exposed in logs
+  - API endpoints protected
+- Validate logout clears all session data
+
+---
+
+### 10. ✅ Build & Deployment Readiness
+- No runtime errors
+- No console errors
+- Clean production build
+- Verify:
+  - Android build (APK/AAB)
+  - iOS build compatibility (if applicable)
+
+---
+
+## 🚨 EDGE CASE TESTING
+
+- No internet connection
+- App in background then resumed
+- Rapid clicking / spam actions
+- Switching settings أثناء استخدام التطبيق
+
+---
+
+## 📊 OUTPUT FORMAT
+
+Provide:
+
+### 1. Critical Issues (MUST FIX before release)
+### 2. Warnings (Can release but not ideal)
+### 3. Passed Tests
+### 4. Suggested Improvements
+
+For each issue:
+- Describe problem
+- Show affected code (if needed)
+- Suggest fix (minimal)
+
+---
+
+## 🧠 EXPECTATION
+
+Think like:
+- QA Engineer
+- Product Manager
+- Real user
+
+Your goal is to BREAK the app and report everything that would fail in production.
+
+Do not assume anything works — verify everything.

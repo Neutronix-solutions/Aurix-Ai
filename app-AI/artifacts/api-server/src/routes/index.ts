@@ -1,0 +1,40 @@
+import { Router, type IRouter } from "express";
+import healthRouter from "./health";
+import authRouter from "./auth";
+import expensesRouter from "./expenses";
+import portfolioRouter from "./portfolio";
+import scoreRouter from "./score";
+import goalsRouter from "./goals";
+import gamificationRouter from "./gamification";
+import alertsRouter from "./alerts";
+import smsRouter from "./sms";
+import aiRouter from "./ai";
+import openaiRouter from "./openai";
+import incomeRouter from "./income";
+import marketsRouter from "./markets";
+import reportRouter from "./report";
+import billsRouter from "./bills";
+import goldRouter from "./gold";
+import currencyRouter from "./currency";
+
+const router: IRouter = Router();
+
+router.use(healthRouter);
+router.use(authRouter);
+router.use(currencyRouter);
+router.use(expensesRouter);
+router.use(portfolioRouter);
+router.use(scoreRouter);
+router.use(goalsRouter);
+router.use(gamificationRouter);
+router.use(alertsRouter);
+router.use(smsRouter);
+router.use(aiRouter);
+router.use(openaiRouter);
+router.use(incomeRouter);
+router.use(marketsRouter);
+router.use(reportRouter);
+router.use(billsRouter);
+router.use(goldRouter);
+
+export default router;

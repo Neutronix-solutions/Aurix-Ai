@@ -1,0 +1,145 @@
+PHASE 2 — Fix remaining TypeScript errors blocking stable Android production build
+
+The Metro runtime crash is fixed.
+
+Now complete a strict TypeScript stabilization pass across the mobile app.
+
+PROJECT:
+Aurix AI
+Expo Router
+React Native
+TypeScript strict mode
+
+Goal:
+ZERO TypeScript errors.
+Production-safe Android APK/AAB build.
+
+====================================================
+TASK 1 — Fix profile.tsx remaining broken references
+====================================================
+
+File:
+artifacts/mobile/app/(tabs)/profile.tsx
+
+Current unresolved references include:
+
+* setConfirmPw
+* pwInput
+* saveBtn
+* saveBtnText
+* handleChangePassword
+* pwSaving
+
+Tasks:
+
+1. Trace the Password Change Modal implementation.
+2. Add any missing useState declarations.
+3. Add missing handlers.
+4. Reuse existing styles where possible.
+5. If styles are missing:
+
+   * create minimal styles safely
+   * DO NOT duplicate existing style names
+6. Ensure:
+
+   * password modal opens
+   * save button works
+   * validation works
+   * no undefined references remain
+
+====================================================
+TASK 2 — Fix _layout.tsx
+========================
+
+File:
+artifacts/mobile/app/_layout.tsx
+
+Tasks:
+
+1. Fix all TypeScript/navigation errors.
+2. Ensure:
+
+   * Auth routing works
+   * Protected routes redirect correctly
+   * Splash screen handling is stable
+   * No infinite rerenders
+3. Verify Expo Router types.
+
+====================================================
+TASK 3 — Fix hooks/useNotifications.ts
+======================================
+
+Tasks:
+
+1. Fix Expo Notifications typing issues.
+2. Ensure permission flow works correctly.
+3. Prevent memory leaks on listeners.
+4. Ensure cleanup() removes listeners safely.
+5. Add null-safe guards everywhere.
+
+====================================================
+TASK 4 — Fix GoalPlanner + ScoreBreakdown
+=========================================
+
+Files:
+
+* components/GoalPlanner.tsx
+* components/ScoreBreakdown.tsx
+
+Tasks:
+
+1. Fix all prop typings.
+2. Remove implicit any usage.
+3. Fix nullable values safely.
+4. Ensure calculations never produce NaN.
+5. Add fallback rendering for missing data.
+
+====================================================
+TASK 5 — Full strict validation
+===============================
+
+Run:
+
+pnpm --filter mobile exec tsc --noEmit
+
+Must return:
+ZERO ERRORS
+
+Then run:
+
+expo start -c
+
+Then run:
+
+eas build --platform android --profile preview
+
+====================================================
+TASK 6 — Production hardening
+=============================
+
+Verify:
+
+* no duplicate imports
+* no unused state
+* no unreachable code
+* no shadowed variables
+* no any abuse unless unavoidable
+* no silent Promise rejections
+
+====================================================
+TASK 7 — Final report
+=====================
+
+Generate:
+
+1. Exact files changed
+2. Exact errors fixed
+3. Remaining risks
+4. Android build readiness score /10
+5. Whether APK and AAB are production-safe
+
+CRITICAL:
+Do NOT rewrite architecture.
+Do NOT remove business logic.
+Do NOT disable TypeScript rules.
+Fix correctly.

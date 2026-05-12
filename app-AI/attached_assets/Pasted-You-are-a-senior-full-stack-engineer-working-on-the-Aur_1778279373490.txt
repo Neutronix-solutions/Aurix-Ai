@@ -1,0 +1,149 @@
+You are a senior full-stack engineer working on the Aurix AI fintech application.
+
+Project stack:
+
+* Expo React Native
+* Express.js backend
+* Drizzle ORM
+* PostgreSQL
+* OTP authentication system
+* AI coach + analytics system
+
+Your task is to implement the following production changes directly into the correct files without breaking the existing architecture.
+
+====================================================
+
+1. REGISTRATION MUST REQUIRE EMAIL OTP
+   ====================================================
+
+Current issue:
+Users can attempt registration without proper verification flow.
+
+Required behavior:
+
+* User enters:
+
+  * name
+  * email
+  * password
+* System sends OTP to EMAIL ONLY
+* Phone number is NOT required during signup
+* User CANNOT complete registration until OTP is verified
+
+Required flow:
+Register
+→ create unverified user
+→ send email OTP
+→ verify OTP
+→ activate account
+→ issue JWT/session
+
+Requirements:
+
+* OTP expiration: 5 minutes
+* Max attempts: 5
+* Cooldown between sends: 60 seconds
+* Proper JSON error responses
+* No silent failures
+
+====================================================
+2. PROFILE SETTINGS IMPROVEMENTS
+================================
+
+In profile screen allow user to:
+
+* Change email
+* Change phone number
+* Change name
+* Change password
+* Upload/change profile photo
+
+IMPORTANT:
+If user changes email:
+
+* send OTP verification immediately
+* email remains unverified until OTP succeeds
+
+Phone number update:
+
+* validate format
+* save securely
+
+Password update:
+
+* require old password
+* hash new password securely
+
+====================================================
+3. DASHBOARD + ANALYTICS SYNC FIX
+=================================
+
+Current issue:
+When user adds income, the dashboard and analytics do not update.
+
+Fix required:
+
+* income additions must instantly reflect in:
+
+  * dashboard
+  * analytics
+  * salary/income totals
+* add proper state refresh or query invalidation
+* ensure backend totals are recalculated correctly
+
+====================================================
+4. APP REBRANDING
+=================
+
+Rename the application everywhere from:
+"Money Mind AI"
+
+TO:
+"Aurix AI"
+
+Update:
+
+* app.json
+* package names if needed
+* splash/app title
+* visible app name
+* navigation titles
+* branding strings
+
+Do NOT break builds.
+
+====================================================
+5. BACKEND REQUIREMENTS
+=======================
+
+* All endpoints must return valid JSON
+* Add safe error handling
+* Add validation for email + password
+* Ensure OTP routes are secure
+* Do not expose secrets to frontend
+* Keep existing JWT/auth architecture
+
+====================================================
+6. MOBILE REQUIREMENTS
+======================
+
+* Improve error messages
+* Prevent infinite loading states
+* Add retry handling for OTP verification
+* Ensure Android compatibility
+
+====================================================
+OUTPUT REQUIRED
+===============
+
+After implementing:
+
+1. List all modified files
+2. Explain each change
+3. Mention any migration required
+4. Mention any env vars required
+5. Confirm TypeScript passes
+6. Confirm Android build safety
+
+Do not over-engineer.
+Focus on production stability and clean integration.
