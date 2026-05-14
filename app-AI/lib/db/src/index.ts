@@ -15,7 +15,9 @@ if (!databaseUrl) {
 const sslRequired =
   process.env.PGSSLMODE === "require" ||
   databaseUrl.includes("render.com") ||
-  databaseUrl.includes("oregon-postgres.render.com");
+  databaseUrl.includes("oregon-postgres.render.com") ||
+  databaseUrl.includes("postgres.render.com") ||
+  databaseUrl.includes("sslmode=require");
 
 export const pool = new Pool({
   connectionString: databaseUrl,
